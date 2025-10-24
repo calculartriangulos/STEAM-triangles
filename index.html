@@ -5,60 +5,66 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calculadora de triângulos - Projeto STEAM</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">  <!-- favicons: alterado para usar nome steamm (arquivo circular 512x512 conforme informado) -->  <link rel="icon" type="image/png" sizes="32x32" href="steamm.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="32x32" href="steamm.png">
   <link rel="icon" type="image/png" sizes="512x512" href="steamm-512.png">
-  <!-- fallback SVG embutido (círculo azul com S) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%231976d2'/%3E%3Ctext x='32' y='40' font-family='Inter,Arial,Helvetica' font-size='28' text-anchor='middle' fill='white'%3ES%3C/text%3E%3C/svg%3E">  <meta name="msapplication-TileImage" content="steamm-512.png">  <style>
+  <meta name="msapplication-TileImage" content="steamm-512.png">
+  <style>
     :root{--bg:#f4f7fb;--card:#ffffff;--accent:#1976d2;--muted:#6b7280;--glass:rgba(25,118,210,0.06)}
     *{box-sizing:border-box}
     body{font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;background:linear-gradient(180deg,#f7fbff 0%, #eef6ff 100%);color:#0b1220}
     .wrap{max-width:1180px;margin:26px auto;padding:20px}
     header{display:flex;align-items:center;gap:16px}
     h1{margin:0;font-size:20px}
-    .subtitle{color:var(--muted);font-size:13px}
+    .subtitle{color:var(--muted);font-size:13px}/* Layout: desktop two columns, mobile single column with svg above inputs */
+.grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
+.card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(17,24,39,0.06);border:1px solid rgba(13,27,52,0.04)}
 
-    /* Layout: desktop two columns, mobile single column with svg below inputs */
-    .grid{display:grid;grid-template-columns:360px 1fr;gap:18px;margin-top:18px}
-    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(17,24,39,0.06);border:1px solid rgba(13,27,52,0.04)}
+.controls-card{order:0}
+.visual-card{order:0}
 
-    label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
-    input[type=number],select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(13,27,52,0.06);background:transparent;color:inherit;font-size:14px;margin-bottom:10px}
-    .row{display:flex;gap:8px}
-    button{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
-    button.ghost{background:transparent;border:1px solid rgba(13,27,52,0.06);color:var(--muted)}
-    .muted{color:var(--muted)}
+label{display:block;font-size:13px;margin-bottom:6px;color:var(--muted)}
+input[type=number],select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(13,27,52,0.06);background:transparent;color:inherit;font-size:14px;margin-bottom:10px}
+.row{display:flex;gap:8px}
+button{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer;font-weight:600}
+button.ghost{background:transparent;border:1px solid rgba(13,27,52,0.06);color:var(--muted)}
+.muted{color:var(--muted)}
 
-    /* SVG / desenho */
-    .svgwrap{display:flex;align-items:center;justify-content:center;height:460px}
-    svg{background:linear-gradient(180deg,#ffffff, #eef6ff);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)}
+/* SVG / desenho */
+.svgwrap{display:flex;align-items:center;justify-content:center;height:460px}
+svg{background:linear-gradient(180deg,#ffffff, #eef6ff);border-radius:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);width:100%;height:100%}
 
-    .results{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
-    .pill{background:var(--glass);padding:10px;border-radius:10px;min-width:140px}
-    .small{font-size:12px}
-    .info{font-size:13px;color:var(--muted);margin-top:8px}
-    .top-controls{display:flex;gap:8px;align-items:center}
-    .unit-badge{background:rgba(13,27,52,0.03);padding:6px 8px;border-radius:8px}
-    .type-badge{padding:6px 8px;border-radius:8px;background:linear-gradient(90deg,#e8f3ff,#d6ecff);font-weight:600;color:#034ea2}
-    .legend{margin-top:12px;background:rgba(13,27,52,0.02);padding:10px;border-radius:8px;font-size:13px}
-    .unit-wrap { display:flex; align-items:center; gap:10px; }
-    .unit-img { width:40px; height:40px; border-radius:8px; box-shadow: 0 2px 6px rgba(3,59,107,0.08); flex:0 0 40px; display:inline-block; object-fit:cover }
+.results{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.pill{background:var(--glass);padding:10px;border-radius:10px;min-width:140px}
+.small{font-size:12px}
+.info{font-size:13px;color:var(--muted);margin-top:8px}
+.top-controls{display:flex;gap:8px;align-items:center}
+.unit-badge{background:rgba(13,27,52,0.03);padding:6px 8px;border-radius:8px}
+.type-badge{padding:6px 8px;border-radius:8px;background:linear-gradient(90deg,#e8f3ff,#d6ecff);font-weight:600;color:#034ea2}
+.legend{margin-top:12px;background:rgba(13,27,52,0.02);padding:10px;border-radius:8px;font-size:13px}
+.unit-wrap { display:flex; align-items:center; gap:10px; }
+.unit-img { width:40px; height:40px; border-radius:8px; box-shadow: 0 2px 6px rgba(3,59,107,0.08); flex:0 0 40px; display:inline-block; object-fit:cover }
 
-    /* Mobile improvements */
-    @media (max-width: 720px){
-      .wrap{padding:12px}
-      .grid{grid-template-columns:1fr}
-      .card{padding:14px}
-      .svgwrap{height:320px}
-      svg{width:100%;height:auto;max-height:360px}
-      input[type=number],select{font-size:16px;padding:12px}
-      button{padding:12px 16px;font-size:16px}
-      .unit-img{width:48px;height:48px;border-radius:10px}
-      .pill{min-width:120px}
-    }
+/* Mobile improvements */
+@media (max-width: 720px){
+  .wrap{padding:12px}
+  .grid{grid-template-columns:1fr}
+  .card{padding:14px}
+  .svgwrap{height:320px}
+  svg{width:100%;height:auto;max-height:360px}
+  input[type=number],select{font-size:16px;padding:12px}
+  button{padding:12px 16px;font-size:16px}
+  .unit-img{width:48px;height:48px;border-radius:10px}
+  .pill{min-width:120px}
+  /* move svg visual above the controls on small screens */
+  .visual-card{order:-1}
+}
 
-    /* Accessibility / touch cursor */
-    svg, .svgwrap { touch-action: none; -ms-touch-action: none; }
-  </style></head>
+/* Accessibility / touch cursor */
+svg, .svgwrap { touch-action: none; -ms-touch-action: none; }
+
+  </style>
+</head>
 <body>
   <div class="wrap">
     <header>
@@ -67,7 +73,7 @@
         <div class="subtitle">Digite os comprimentos dos lados (unidades métricas). O desenho e os rótulos atualizarão automaticamente.</div>
       </div>
     </header><div class="grid">
-  <div class="card">
+  <div class="card controls-card">
     <div class="top-controls">
       <div class="unit-wrap" style="flex:0 0 auto">
         <img class="unit-img" src="tri.jpg" alt="Ícone triângulo">
@@ -79,7 +85,6 @@
           </select>
         </label>
       </div>
-
       <div style="flex:1"></div>
     </div>
 
@@ -111,364 +116,369 @@
         <li>Área — área do triângulo.</li>
       </ul>
     </div>
-
   </div>
 
-  <div class="card">
+  <div class="card visual-card">
     <div class="svgwrap">
       <svg id="canvas" width="760" height="460" viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama do triângulo">
         <g id="tri-group"></g>
       </svg>
     </div>
-
     <div style="display:flex;justify-content:flex-end;align-items:center;margin-top:12px">
       <div id="triangleType" class="type-badge">Tipo: —</div>
     </div>
-
   </div>
 </div>
 
-  </div><script>
-// Utilitários e configuração
-const $ = sel=>document.querySelector(sel);
-const aInput = $('#a'), bInput = $('#b'), cInput = $('#c');
-const calcBtn = $('#calc'), resetBtn = $('#reset'), exportPNGBtn = $('#exportPNG');
-const summaryEl = $('#summary'), svg = $('#canvas'), triGroup = $('#tri-group');
-const unitEl = $('#unit'), typeBadge = $('#triangleType');
-let state = { pts:[{x:0,y:0},{x:0,y:0},{x:0,y:0}], unit:'m' };
+  </div>  <script>
+    // Seletores
+    const aInput = document.getElementById('a');
+    const bInput = document.getElementById('b');
+    const cInput = document.getElementById('c');
+    const calcBtn = document.getElementById('calc');
+    const resetBtn = document.getElementById('reset');
+    const exportPNGBtn = document.getElementById('exportPNG');
+    const summaryEl = document.getElementById('summary');
+    const svg = document.getElementById('canvas');
+    const triGroup = document.getElementById('tri-group');
+    const unitEl = document.getElementById('unit');
+    const typeBadge = document.getElementById('triangleType');
 
-// touch friendliness: detect touch devices and increase hit areas
-const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints;
-const HANDLE_RADIUS = isTouch ? 12 : 6; // visible handle
-const HIT_RADIUS = Math.max(18, HANDLE_RADIUS*2); // invisible hit area
-const VERTEX_RADIUS = isTouch ? 12 : 8;
+    let state = {
+      pts: [{x:0,y:0},{x:0,y:0},{x:0,y:0}], // model coordinates (meters)
+      unit: 'm'
+    };
 
-// prevent default page scrolling/zoom while manipulating the svg
-svg.style.touchAction = 'none';
+    const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints;
+    const HANDLE_RADIUS = isTouch ? 12 : 6;
+    const HIT_RADIUS = Math.max(18, HANDLE_RADIUS*2);
+    const VERTEX_RADIUS = isTouch ? 12 : 8;
 
-function toMeters(value, unit){ if(unit==='m') return value; if(unit==='cm') return value/100; if(unit==='km') return value*1000; return value; }
-function fromMeters(value, unit){ if(unit==='m') return value; if(unit==='cm') return value*100; if(unit==='km') return value/1000; return value; }
-function degToRad(d){return d*Math.PI/180}
-function radToDeg(r){return r*180/Math.PI}
-function clamp(x){ if(x>1) return 1; if(x<-1) return -1; return x }
+    // helpers
+    function toMeters(value, unit){ if(unit==='m') return value; if(unit==='cm') return value/100; if(unit==='km') return value*1000; return value; }
+    function fromMeters(value, unit){ if(unit==='m') return value; if(unit==='cm') return value*100; if(unit==='km') return value/1000; return value; }
+    function degToRad(d){ return d * Math.PI / 180; }
+    function radToDeg(r){ return r * 180 / Math.PI; }
+    function clamp(x){ if(x>1) return 1; if(x<-1) return -1; return x; }
+    function formatNum(v){ return Number.isFinite(v)? parseFloat(v.toFixed(2)) : '—'; }
 
-function formatNum(v){ return Number.isFinite(v)? parseFloat(v.toFixed(2)) : '—'; }
-
-// melhor detecção de tipo por lados com tolerância relativa
-function detectType(a,b,c){
-  const sides = [a,b,c].slice().sort((x,y)=>x-y);
-  const tol = 1e-3 * Math.max(1, ...sides);
-  const eq = (x,y) => Math.abs(x-y) <= tol;
-  if(eq(a,b) && eq(b,c)) return 'Equilátero';
-  if(eq(a,b) || eq(b,c) || eq(a,c)) return 'Isósceles';
-  return 'Escaleno';
-}
-
-function classifyAngle(a,b,c){
-  const sides = [a,b,c].slice().sort((x,y)=>x-y);
-  const s0 = sides[0], s1 = sides[1], s2 = sides[2];
-  const lhs = s0*s0 + s1*s1; const rhs = s2*s2;
-  const tol = 1e-3 * Math.max(1, rhs);
-  if(Math.abs(lhs - rhs) <= tol) return 'Retângulo';
-  if(lhs > rhs) return 'Acutângulo';
-  return 'Obtusângulo';
-}
-
-function detectTypeCombined(a,b,c){
-  const sideType = detectType(a,b,c);
-  const angleType = classifyAngle(a,b,c);
-  return {sideType, angleType};
-}
-
-function computeFromSidesInputs(){
-  const unit = unitEl.value; state.unit = unit;
-  const ai = parseFloat(aInput.value), bi = parseFloat(bInput.value), ci = parseFloat(cInput.value);
-  if(!isFinite(ai) || !isFinite(bi) || !isFinite(ci) || ai<=0 || bi<=0 || ci<=0){
-    summaryEl.innerHTML = `<div class='pill'><strong>Erro</strong><div class='muted'>Preencha 3 lados positivos.</div></div>`; 
-    return null;
-  }
-  const a = toMeters(ai,unit), b = toMeters(bi,unit), c = toMeters(ci,unit);
-  if(!(a+b>c && a+c>b && b+c>a)){
-    summaryEl.innerHTML = `<div class='pill'><strong>Erro</strong><div class='muted'>Os lados não formam um triângulo. A soma de dois lados deve ser maior que o terceiro lado.</div></div>`; 
-    return null;
-  }
-
-  const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a)/(2*b*c))));
-  const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b)/(2*a*c))));
-  const C = 180 - A - B;
-  const s = (a+b+c)/2;
-  const area = Math.sqrt(Math.max(0,s*(s-a)*(s-b)*(s-c)));
-  const r = area / s; // inscrito
-  const R = (a*b*c) / (4*area); // circunscrito
-
-  const result = {a,b,c,A,B,C,area,s,r,R};
-  return result;
-}
-
-function showResults(res){
-  summaryEl.innerHTML='';
-  const unit = state.unit; const conv = v=> fromMeters(v,unit);
-  const angleClass = classifyAngle(res.a,res.b,res.c);
-  const sideClass = detectType(res.a,res.b,res.c);
-
-  const labels = [
-    ['Tipo (lados)', sideClass],
-    ['Classificação angular', angleClass],
-    ['a',conv(res.a)],
-    ['b',conv(res.b)],
-    ['c',conv(res.c)],
-    ['A (°)',res.A],
-    ['B (°)',res.B],
-    ['C (°)',res.C],
-    ['Área ('+unit+'²)',conv(res.area)],
-    ['Perímetro ('+unit+')',conv(res.a+res.b+res.c)],
-    ['r — Raio inscrito ('+unit+')',conv(res.r)],
-    ['R — Raio circunscrito ('+unit+')',conv(res.R)]
-  ];
-  for(const [k,v] of labels){
-    const d=document.createElement('div'); d.className='pill';
-    if(k === 'Tipo (lados)' || k === 'Classificação angular'){
-      d.innerHTML=`<strong>${k}</strong><div class='muted'>${v}</div>`;
-    } else {
-      d.innerHTML=`<strong>${k}</strong><div class='muted'>${formatNum(v)} ${k.includes('°')? '': unit}</div>`;
-    }
-    summaryEl.appendChild(d);
-  }
-  typeBadge.textContent = `Tipo: ${sideClass} · ${angleClass}`;
-}
-
-function placeTriangleFromSides(a,b,c){
-  // place P1 at (0,0), P2 at (c,0), compute P3
-  const x1=0,y1=0; const x2=c,y2=0;
-  const x = (a*a + c*c - b*b) / (2*c);
-  const y = Math.sqrt(Math.max(0, a*a - x*x));
-  return [{x:x1,y:y1},{x:x2,y:y2},{x:x,y:y}];
-}
-
-function drawTriangle(){
-  triGroup.innerHTML='';
-  const margin=40;
-  const xs=state.pts.map(p=>p.x); const ys=state.pts.map(p=>p.y);
-  const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
-  const w = maxx-minx || 1; const h = maxy-miny || 1;
-  const viewW = 640, viewH = 360;
-  const scale = Math.min((viewW-2*margin)/w, (viewH-2*margin)/h);
-  const tx = (viewW - (maxx+minx)*scale)/2 + 60;
-  const ty = (viewH - (maxy+miny)*scale)/2 + 30;
-  const ptsScaled = state.pts.map(p=>({x: p.x*scale + tx, y: p.y*scale + ty}));
-
-  const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-  poly.setAttribute('points', ptsScaled.map(p=>`${p.x},${p.y}`).join(' '));
-  poly.setAttribute('fill','rgba(25,118,210,0.15)');
-  poly.setAttribute('stroke','#0b60a6');
-  poly.setAttribute('stroke-width','3');
-  triGroup.appendChild(poly);
-
-  // edge lengths labels and side names (a,b,c)
-  for(let i=0;i<3;i++){
-    const p1=ptsScaled[i]; const p2=ptsScaled[(i+1)%3];
-    const midx=(p1.x+p2.x)/2; const midy=(p1.y+p2.y)/2;
-    const lenModel = Math.hypot(p1.x-p2.x,p1.y-p2.y)/scale; // model units (meters)
-    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
-    txt.setAttribute('x',midx); txt.setAttribute('y',midy-10); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle');
-    txt.setAttribute('fill','#023b6b');
-    const sideName = ['a','b','c'][i];
-    txt.textContent = sideName + ' = ' + formatNum(fromMeters(lenModel,state.unit)) + ' ' + state.unit;
-    triGroup.appendChild(txt);
-
-    // invisible hit area (maior) para touch
-    const hit = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    hit.setAttribute('cx',midx); hit.setAttribute('cy',midy); hit.setAttribute('r',HIT_RADIUS); hit.setAttribute('fill','transparent'); hit.setAttribute('style','cursor:grab');
-    triGroup.appendChild(hit);
-    // visible handle
-    const handle = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    handle.setAttribute('cx',midx); handle.setAttribute('cy',midy); handle.setAttribute('r',HANDLE_RADIUS); handle.setAttribute('fill','#fff'); handle.setAttribute('stroke','#0b60a6'); handle.setAttribute('stroke-width',2);
-    triGroup.appendChild(handle);
-
-    // make both hit and handle draggable (both share the same edge index)
-    makeEdgeDraggable(hit,i,scale,tx,ty);
-    makeEdgeDraggable(handle,i,scale,tx,ty);
-  }
-
-  // vertices, angle labels, draggable
-  const [p1,p2,p3] = state.pts;
-  const sideA = Math.hypot(p2.x-p3.x,p2.y-p3.y);
-  const sideB = Math.hypot(p1.x-p3.x,p1.y-p3.y);
-  const sideC = Math.hypot(p1.x-p2.x,p1.y-p2.y);
-  const Aang = radToDeg(Math.acos(clamp((sideB*sideB + sideC*sideC - sideA*sideA)/(2*sideB*sideC))));
-  const Bang = radToDeg(Math.acos(clamp((sideA*sideA + sideC*sideC - sideB*sideB)/(2*sideA*sideC))));
-  const Cang = 180 - Aang - Bang;
-  const angleLabels = [Aang,Bang,Cang];
-
-  for(let i=0;i<3;i++){
-    const p=ptsScaled[i]; const g = document.createElementNS('http://www.w3.org/2000/svg','g');
-    // invisible larger circle for hit
-    const hitV = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    hitV.setAttribute('cx',p.x); hitV.setAttribute('cy',p.y); hitV.setAttribute('r',HIT_RADIUS); hitV.setAttribute('fill','transparent'); hitV.setAttribute('style','cursor:grab');
-    // visible circle
-    const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
-    circ.setAttribute('cx',p.x); circ.setAttribute('cy',p.y); circ.setAttribute('r',VERTEX_RADIUS); circ.setAttribute('fill','#fff'); circ.setAttribute('stroke','#0b60a6'); circ.setAttribute('stroke-width',2);
-    const lbl = document.createElementNS('http://www.w3.org/2000/svg','text'); lbl.setAttribute('x',p.x+14); lbl.setAttribute('y',p.y+6); lbl.setAttribute('font-size','13'); lbl.setAttribute('fill','#023b6b'); lbl.textContent = ['A','B','C'][i];
-    const ang = document.createElementNS('http://www.w3.org/2000/svg','text'); ang.setAttribute('x',p.x-20); ang.setAttribute('y',p.y-14); ang.setAttribute('font-size','12'); ang.setAttribute('fill','#023b6b'); ang.textContent = angleLabels[i].toFixed(1) + '°';
-    g.appendChild(hitV); g.appendChild(circ); g.appendChild(lbl); g.appendChild(ang);
-    triGroup.appendChild(g);
-    // attach draggable behavior to the invisible hit area (better for touch)
-    makeVertexDraggable(hitV,i,scale,tx,ty);
-    // also allow drag on the visible circle for desktop precision
-    makeVertexDraggable(circ,i,scale,tx,ty);
-  }
-}
-
-function makeVertexDraggable(el,index,scale,tx,ty){
-  let dragging=false; let start;
-  el.addEventListener('pointerdown',e=>{ e.preventDefault(); dragging=true; el.setPointerCapture(e.pointerId); start={x:e.clientX,y:e.clientY}; el.style.cursor='grabbing'; });
-  window.addEventListener('pointermove',e=>{ if(!dragging) return; e.preventDefault(); const dx=(e.clientX-start.x)/scale; const dy=(e.clientY-start.y)/scale; start={x:e.clientX,y:e.clientY}; state.pts[index].x += dx; state.pts[index].y += dy; drawTriangle(); recomputeFromCoords(); });
-  window.addEventListener('pointerup',e=>{ if(dragging){dragging=false; try{ el.releasePointerCapture(e.pointerId); }catch(e){} el.style.cursor='grab'; } });
-}
-
-function makeEdgeDraggable(el,edgeIndex,scale,tx,ty){
-  let dragging=false; let startClient;
-  el.addEventListener('pointerdown',e=>{ e.preventDefault(); dragging=true; el.setPointerCapture(e.pointerId); startClient={x:e.clientX,y:e.clientY}; el.style.cursor='grabbing'; });
-  window.addEventListener('pointermove',e=>{ if(!dragging) return; e.preventDefault(); const cur={x:e.clientX,y:e.clientY}; const dxClient = cur.x - startClient.x; const dyClient = cur.y - startClient.y; startClient=cur;
-    const i = edgeIndex; const j = (i+1)%3;
-    const p1 = state.pts[i]; const p2 = state.pts[j];
-    const ex = p2.x - p1.x; const ey = p2.y - p1.y;
-    const len = Math.hypot(ex,ey);
-    if(len === 0) return;
-    const ux = ex/len; const uy = ey/len; // unit vector along edge
-    const dmx = dxClient/scale; const dmy = dyClient/scale;
-    const proj = dmx*ux + dmy*uy;
-    const halfx = 0.5*proj*ux; const halfy = 0.5*proj*uy;
-    state.pts[i].x -= halfx; state.pts[i].y -= halfy;
-    state.pts[j].x += halfx; state.pts[j].y += halfy;
-    drawTriangle(); recomputeFromCoords();
-  });
-  window.addEventListener('pointerup',e=>{ if(dragging) dragging=false; try{ el.releasePointerCapture(e.pointerId); }catch(e){} el.style.cursor='grab'; });
-}
-
-function recomputeFromCoords(){
-  const [p1,p2,p3] = state.pts;
-  const a= Math.hypot(p2.x-p3.x,p2.y-p3.y);
-  const b= Math.hypot(p1.x-p3.x,p1.y-p3.y);
-  const c= Math.hypot(p1.x-p2.x,p1.y-p2.y);
-  // update inputs (convert from meters to selected unit)
-  aInput.value = formatNum(fromMeters(a,state.unit));
-  bInput.value = formatNum(fromMeters(b,state.unit));
-  cInput.value = formatNum(fromMeters(c,state.unit));
-
-  const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a)/(2*b*c))));
-  const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b)/(2*a*c))));
-  const C = 180 - A - B;
-  const s=(a+b+c)/2; const area=Math.sqrt(Math.max(0,s*(s-a)*(s-b)*(s-c)));
-  const r= area/s; const R=(a*b*c)/(4*area);
-  summaryEl.innerHTML='';
-  const unit = state.unit; const conv = v=> fromMeters(v,unit);
-  const angleClass = classifyAngle(a,b,c);
-  const sideClass = detectType(a,b,c);
-  const fields=[['Tipo (lados)',sideClass],['Classificação angular',angleClass],['a',conv(a)],['b',conv(b)],['c',conv(c)],['A (°)',A],['B (°)',B],['C (°)',C],['Área',conv(area)],['r',conv(r)],['R',conv(R)]];
-  for(const [k,v] of fields){ const d=document.createElement('div'); d.className='pill'; if(k==='Tipo (lados)' || k==='Classificação angular'){ d.innerHTML=`<strong>${k}</strong><div class='muted'>${v}</div>` } else { d.innerHTML=`<strong>${k}</strong><div class='muted'>${formatNum(v)} ${k.includes('°')? '': unit}</div>` }; summaryEl.appendChild(d); }
-  typeBadge.textContent = 'Tipo: ' + sideClass + ' · ' + angleClass;
-}
-
-function computeAndRender(){
-  const res = computeFromSidesInputs();
-  if(!res) return;
-  showResults(res);
-  // set triangle geometry (em metros)
-  state.pts = placeTriangleFromSides(res.a,res.b,res.c);
-  drawTriangle();
-}
-
-// helper: obtém métricas atuais (lados, ângulos, tipo) a partir do estado
-function getCurrentMetrics(){
-  const [p1,p2,p3] = state.pts;
-  const a = Math.hypot(p2.x-p3.x,p2.y-p3.y);
-  const b = Math.hypot(p1.x-p3.x,p1.y-p3.y);
-  const c = Math.hypot(p1.x-p2.x,p1.y-p2.y);
-  const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a)/(2*b*c))));
-  const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b)/(2*a*c))));
-  const C = 180 - A - B;
-  const unit = state.unit;
-  const sideClass = detectType(a,b,c);
-  const angleClass = classifyAngle(a,b,c);
-  return {
-    a: fromMeters(a,unit),
-    b: fromMeters(b,unit),
-    c: fromMeters(c,unit),
-    A, B, C,
-    type: sideClass,
-    angleType: angleClass,
-    unit
-  };
-}
-
-// export PNG
-exportPNGBtn.addEventListener('click',()=>{
-  const svgData = new XMLSerializer().serializeToString(svg);
-  const blob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
-  const url = URL.createObjectURL(blob);
-  const img = new Image(); img.onload = ()=>{
-    const canvas = document.createElement('canvas'); canvas.width=760; canvas.height=460; const ctx=canvas.getContext('2d');
-    ctx.fillStyle='#eef6ff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(img,0,0);
-
-    const m = getCurrentMetrics();
-    const lines = [
-      `Tipo (lados): ${m.type}`,
-      `Tipo (ângulos): ${m.angleType}`,
-      `a = ${formatNum(m.a)} ${m.unit}`,
-      `b = ${formatNum(m.b)} ${m.unit}`,
-      `c = ${formatNum(m.c)} ${m.unit}`,
-      `A = ${formatNum(m.A)}°`,
-      `B = ${formatNum(m.B)}°`,
-      `C = ${formatNum(m.C)}°`
-    ];
-
-    const padding = 10;
-    ctx.font = '14px Inter, system-ui, Arial';
-    let maxW = 0;
-    for(const line of lines){ const w = ctx.measureText(line).width; if(w>maxW) maxW = w; }
-    const boxW = maxW + padding*2;
-    const boxH = lines.length*18 + padding*2;
-    const boxX = canvas.width - boxW - 12;
-    const boxY = 12;
-    ctx.fillStyle = 'rgba(255,255,255,0.88)';
-    ctx.strokeStyle = 'rgba(3,59,107,0.06)';
-    roundRect(ctx, boxX, boxY, boxW, boxH, 8, true, true);
-    ctx.fillStyle = '#023b6b';
-    ctx.textBaseline = 'top';
-    let y = boxY + padding;
-    for(const line of lines){
-      ctx.fillText(line, boxX + padding, y);
-      y += 18;
+    function detectType(a,b,c){
+      const sides = [a,b,c].slice().sort((x,y)=>x-y);
+      const tol = 1e-3 * Math.max(1, ...sides);
+      const eq = (x,y) => Math.abs(x-y) <= tol;
+      if(eq(a,b) && eq(b,c)) return 'Equilátero';
+      if(eq(a,b) || eq(b,c) || eq(a,c)) return 'Isósceles';
+      return 'Escaleno';
     }
 
-    const png = canvas.toDataURL('image/png'); const a=document.createElement('a'); a.href=png; a.download='triangulo.png'; a.click(); URL.revokeObjectURL(url);
-  };
-  img.src = url;
-});
+    function classifyAngle(a,b,c){
+      // classifica pelo teorema de Pitágoras com tolerância: compare os quadrados dos lados
+      const sides = [a,b,c].slice().sort((x,y)=>x-y); // s0 <= s1 <= s2
+      const s0 = sides[0], s1 = sides[1], s2 = sides[2];
+      const lhs = s0*s0 + s1*s1;
+      const rhs = s2*s2;
+      const tol = 1e-3 * Math.max(1, rhs);
+      if(Math.abs(lhs - rhs) <= tol) return 'Retângulo';
+      if(lhs > rhs) return 'Acutângulo';
+      return 'Obtusângulo';
+    }
 
-// desenha um rect arredondado (helper)
-function roundRect(ctx, x, y, w, h, r, fill, stroke) {
-  if (typeof r === 'undefined') r = 5;
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.arcTo(x + w, y, x + w, y + h, r);
-  ctx.arcTo(x + w, y + h, x, y + h, r);
-  ctx.arcTo(x, y + h, x, y, r);
-  ctx.arcTo(x, y, x + w, y, r);
-  ctx.closePath();
-  if (fill) ctx.fill();
-  if (stroke) ctx.stroke();
-}
+    function computeFromSidesInputs(){
+      const unit = unitEl.value; state.unit = unit;
+      const ai = parseFloat(aInput.value), bi = parseFloat(bInput.value), ci = parseFloat(cInput.value);
+      if(!isFinite(ai) || !isFinite(bi) || !isFinite(ci) || ai<=0 || bi<=0 || ci<=0){
+        summaryEl.innerHTML = "<div class='pill'><strong>Erro</strong><div class='muted'>Preencha 3 lados positivos.</div></div>";
+        return null;
+      }
+      const a = toMeters(ai,unit), b = toMeters(bi,unit), c = toMeters(ci,unit);
+      if(!(a+b>c && a+c>b && b+c>a)){
+        summaryEl.innerHTML = "<div class='pill'><strong>Erro</strong><div class='muted'>Os lados não formam um triângulo. A soma de dois lados deve ser maior que o terceiro lado.</div></div>";
+        return null;
+      }
 
-// events
-calcBtn.addEventListener('click',computeAndRender);
-resetBtn.addEventListener('click',()=>{ aInput.value=''; bInput.value=''; cInput.value=''; summaryEl.innerHTML=''; triGroup.innerHTML=''; state.pts=[{x:0,y:0},{x:0,y:0},{x:0,y:0}]; typeBadge.textContent='Tipo: —'; });
-unitEl.addEventListener('change',()=>{ state.unit = unitEl.value; if(aInput.value && bInput.value && cInput.value){ computeAndRender(); }});
+      // ângulos pelo cosseno
+      const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a) / (2*b*c))));
+      const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b) / (2*a*c))));
+      const C = 180 - A - B;
 
-// initialize default triangle equilateral side 1m
-function initDefault(){ aInput.value = '1'; bInput.value='1'; cInput.value='1'; computeAndRender(); }
-initDefault();
-</script></body>
+      const s = (a+b+c)/2;
+      const area = Math.sqrt(Math.max(0, s*(s-a)*(s-b)*(s-c)));
+      const r = area / s; // inscrito
+      const R = (a*b*c) / (4*area); // circunscrito
+
+      return {a,b,c,A,B,C,area,s,r,R};
+    }
+
+    function showResults(res){
+      summaryEl.innerHTML='';
+      const unit = state.unit; const conv = v=> fromMeters(v,unit);
+      const angleClass = classifyAngle(res.a,res.b,res.c);
+      const sideClass = detectType(res.a,res.b,res.c);
+
+      const labels = [
+        ['Tipo (lados)', sideClass],
+        ['Classificação angular', angleClass],
+        ['a',conv(res.a)],
+        ['b',conv(res.b)],
+        ['c',conv(res.c)],
+        ['A (°)',res.A],
+        ['B (°)',res.B],
+        ['C (°)',res.C],
+        ['Área ('+unit+'²)',conv(res.area)],
+        ['Perímetro ('+unit+')',conv(res.a+res.b+res.c)],
+        ['r — Raio inscrito ('+unit+')',conv(res.r)],
+        ['R — Raio circunscrito ('+unit+')',conv(res.R)]
+      ];
+      for(const [k,v] of labels){
+        const d=document.createElement('div'); d.className='pill';
+        if(k === 'Tipo (lados)' || k === 'Classificação angular'){
+          d.innerHTML = `<strong>${k}</strong><div class='muted'>${v}</div>`;
+        } else {
+          const unitSuffix = k.includes('°') ? '' : ' ' + unit;
+          d.innerHTML = `<strong>${k}</strong><div class='muted'>${formatNum(v)}${k.includes('°')? '': unitSuffix}</div>`;
+        }
+        summaryEl.appendChild(d);
+      }
+      typeBadge.textContent = 'Tipo: ' + sideClass + ' · ' + angleClass;
+    }
+
+    function placeTriangleFromSides(a,b,c){
+      // convencao: a = BC, b = AC, c = AB
+      // colocamos A em (0,0), B em (c,0), C em (x,y)
+      const x = (b*b + c*c - a*a) / (2*c);
+      const y = Math.sqrt(Math.max(0, b*b - x*x));
+      const A = {x:0, y:0};
+      const B = {x:c, y:0};
+      const C = {x:x, y:y};
+      return [A,B,C];
+    }
+
+    // transformacao de modelo (metros) para viewport SVG
+    let lastTransform = {scale:1, tx:0, ty:0, margin:40};
+    function drawTriangle(){
+      triGroup.innerHTML = '';
+      const margin = 40;
+      const pts = state.pts;
+      const xs = pts.map(p=>p.x);
+      const ys = pts.map(p=>p.y);
+      const minx = Math.min(...xs), maxx = Math.max(...xs);
+      const miny = Math.min(...ys), maxy = Math.max(...ys);
+      const w = Math.max(1, maxx - minx);
+      const h = Math.max(1, maxy - miny);
+
+      const viewW = 640, viewH = 360; // area interna desejada
+      const scale = Math.min((viewW - 2*margin)/w, (viewH - 2*margin)/h);
+      const tx = (viewW - (maxx+minx)*scale)/2 + 60; // offset to center in SVG viewBox
+      const ty = (viewH - (maxy+miny)*scale)/2 + 30;
+      lastTransform = {scale, tx, ty, margin};
+
+      const ptsScaled = pts.map(p=>({x: p.x*scale + tx, y: (maxy - p.y)*scale + ty}));
+
+      // polygon
+      const poly = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+      poly.setAttribute('points', ptsScaled.map(p=>`${p.x},${p.y}`).join(' '));
+      poly.setAttribute('fill','rgba(25,118,210,0.15)');
+      poly.setAttribute('stroke','#0b60a6');
+      poly.setAttribute('stroke-width','3');
+      triGroup.appendChild(poly);
+
+      // side labels + handles
+      for(let i=0;i<3;i++){
+        const p1 = ptsScaled[i];
+        const p2 = ptsScaled[(i+1)%3];
+        const midx = (p1.x + p2.x)/2; const midy = (p1.y + p2.y)/2;
+        const lenModel = Math.hypot(pts[i].x - pts[(i+1)%3].x, pts[i].y - pts[(i+1)%3].y); // in meters
+        const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+        txt.setAttribute('x', midx); txt.setAttribute('y', midy - 10); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle');
+        txt.setAttribute('fill','#023b6b');
+        const sideName = ['a','b','c'][i];
+        txt.textContent = sideName + ' = ' + formatNum(fromMeters(lenModel,state.unit)) + ' ' + state.unit;
+        triGroup.appendChild(txt);
+      }
+
+      // vertices + draggable
+      const sideA = Math.hypot(pts[1].x-pts[2].x, pts[1].y-pts[2].y);
+      const sideB = Math.hypot(pts[0].x-pts[2].x, pts[0].y-pts[2].y);
+      const sideC = Math.hypot(pts[0].x-pts[1].x, pts[0].y-pts[1].y);
+      const Aang = radToDeg(Math.acos(clamp((sideB*sideB + sideC*sideC - sideA*sideA)/(2*sideB*sideC))));
+      const Bang = radToDeg(Math.acos(clamp((sideA*sideA + sideC*sideC - sideB*sideB)/(2*sideA*sideC))));
+      const Cang = 180 - Aang - Bang;
+      const angleLabels = [Aang,Bang,Cang];
+
+      for(let i=0;i<3;i++){
+        const p = ptsScaled[i];
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+
+        const hitV = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        hitV.setAttribute('cx',p.x); hitV.setAttribute('cy',p.y); hitV.setAttribute('r',HIT_RADIUS); hitV.setAttribute('fill','transparent'); hitV.setAttribute('style','cursor:grab');
+
+        const circ = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        circ.setAttribute('cx',p.x); circ.setAttribute('cy',p.y); circ.setAttribute('r',VERTEX_RADIUS); circ.setAttribute('fill','#fff'); circ.setAttribute('stroke','#0b60a6'); circ.setAttribute('stroke-width',2);
+
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg','text'); lbl.setAttribute('x',p.x+14); lbl.setAttribute('y',p.y+6); lbl.setAttribute('font-size','13'); lbl.setAttribute('fill','#023b6b'); lbl.textContent = ['A','B','C'][i];
+        const ang = document.createElementNS('http://www.w3.org/2000/svg','text'); ang.setAttribute('x',p.x-20); ang.setAttribute('y',p.y-14); ang.setAttribute('font-size','12'); ang.setAttribute('fill','#023b6b'); ang.textContent = angleLabels[i].toFixed(1) + '°';
+
+        g.appendChild(hitV); g.appendChild(circ); g.appendChild(lbl); g.appendChild(ang);
+        triGroup.appendChild(g);
+
+        makeVertexDraggable(hitV,i);
+        makeVertexDraggable(circ,i);
+      }
+    }
+
+    function svgPointToModel(clientX, clientY){
+      // convert screen coordinates to model (meters) using inverse of lastTransform
+      const rect = svg.getBoundingClientRect();
+      const vx = clientX - rect.left; const vy = clientY - rect.top;
+      // invert previous transform: model.x = (vx - tx) / scale
+      const {scale, tx, ty} = lastTransform;
+      // note we used y scaled with (maxy - p.y)*scale + ty, we cannot perfectly invert without knowing maxy
+      // for dragging we approximate by finding model coords via linear inverse using current bounding boxes
+      // A simpler approach: map viewport coords back by solving for model.x and model.y using stored transform and last model bounds
+      // We'll compute an approximate by mapping vx to model.x = (vx - tx)/scale and model.y = ( (lastModelMaxY * scale + ty) - vy ) / scale
+      // To avoid complexity, compute lastModelMaxY from current pts
+      const pts = state.pts; const ys = pts.map(p=>p.y); const maxy = Math.max(...ys);
+      const modelX = (vx - tx) / scale;
+      const modelY = ( (maxy * scale + ty) - vy ) / scale;
+      return {x: modelX, y: modelY};
+    }
+
+    function makeVertexDraggable(el,index){
+      let dragging = false;
+      let pointerId = null;
+      el.addEventListener('pointerdown', e=>{
+        e.preventDefault(); dragging = true; pointerId = e.pointerId; el.setPointerCapture(pointerId); el.style.cursor = 'grabbing';
+      });
+      window.addEventListener('pointermove', e=>{
+        if(!dragging) return; if(e.pointerId !== pointerId) return;
+        e.preventDefault();
+        const modelPt = svgPointToModel(e.clientX, e.clientY);
+        state.pts[index].x = modelPt.x;
+        state.pts[index].y = modelPt.y;
+        // after moving, update inputs and redraw
+        recomputeFromCoords();
+        drawTriangle();
+      });
+      window.addEventListener('pointerup', e=>{
+        if(!dragging) return; if(e.pointerId !== pointerId) return;
+        dragging = false; try{ el.releasePointerCapture(pointerId); }catch(e){}
+        el.style.cursor = 'grab'; pointerId = null;
+      });
+    }
+
+    function recomputeFromCoords(){
+      const [p1,p2,p3] = state.pts;
+      const a = Math.hypot(p2.x-p3.x,p2.y-p3.y);
+      const b = Math.hypot(p1.x-p3.x,p1.y-p3.y);
+      const c = Math.hypot(p1.x-p2.x,p1.y-p2.y);
+      // update inputs (convert from meters to selected unit)
+      aInput.value = formatNum(fromMeters(a,state.unit));
+      bInput.value = formatNum(fromMeters(b,state.unit));
+      cInput.value = formatNum(fromMeters(c,state.unit));
+
+      const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a)/(2*b*c))));
+      const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b)/(2*a*c))));
+      const C = 180 - A - B;
+      const s=(a+b+c)/2; const area=Math.sqrt(Math.max(0,s*(s-a)*(s-b)*(s-c)));
+      const r= area/s; const R=(a*b*c)/(4*area);
+
+      summaryEl.innerHTML='';
+      const unit = state.unit; const conv = v=> fromMeters(v,unit);
+      const angleClass = classifyAngle(a,b,c);
+      const sideClass = detectType(a,b,c);
+      const fields=[['Tipo (lados)',sideClass],['Classificação angular',angleClass],['a',conv(a)],['b',conv(b)],['c',conv(c)],['A (°)',A],['B (°)',B],['C (°)',C],['Área ('+unit+'²)',conv(area)],['r — Raio inscrito ('+unit+')',conv(r)],['R — Raio circunscrito ('+unit+')',conv(R)]];
+      for(const [k,v] of fields){ const d=document.createElement('div'); d.className='pill'; if(k==='Tipo (lados)' || k==='Classificação angular'){ d.innerHTML = `<strong>${k}</strong><div class='muted'>${v}</div>` } else { d.innerHTML = `<strong>${k}</strong><div class='muted'>${formatNum(v)} ${k.includes('°')? '': state.unit}</div>` }; summaryEl.appendChild(d); }
+      typeBadge.textContent = 'Tipo: ' + sideClass + ' · ' + angleClass;
+    }
+
+    // export PNG
+    exportPNGBtn.addEventListener('click', ()=>{
+      const svgClone = svg.cloneNode(true);
+      // ensure the SVG has width/height
+      svgClone.setAttribute('width',760); svgClone.setAttribute('height',460);
+      const svgData = new XMLSerializer().serializeToString(svgClone);
+      const blob = new Blob([svgData], {type: 'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const img = new Image();
+      img.onload = ()=>{
+        const canvas = document.createElement('canvas'); canvas.width=760; canvas.height=460; const ctx=canvas.getContext('2d');
+        ctx.fillStyle='#eef6ff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0);
+
+        const m = getCurrentMetrics();
+        const lines = [
+          `Tipo (lados): ${m.type}`,
+          `Tipo (ângulos): ${m.angleType}`,
+          `a = ${formatNum(m.a)} ${m.unit}`,
+          `b = ${formatNum(m.b)} ${m.unit}`,
+          `c = ${formatNum(m.c)} ${m.unit}`,
+          `A = ${formatNum(m.A)}°`,
+          `B = ${formatNum(m.B)}°`,
+          `C = ${formatNum(m.C)}°`
+        ];
+
+        const padding = 10; ctx.font = '14px Inter, system-ui, Arial'; ctx.textBaseline = 'top';
+        let maxW = 0; for(const line of lines){ const w = ctx.measureText(line).width; if(w>maxW) maxW = w; }
+        const boxW = maxW + padding*2; const boxH = lines.length*18 + padding*2; const boxX = canvas.width - boxW - 12; const boxY = 12;
+        ctx.fillStyle = 'rgba(255,255,255,0.88)'; ctx.strokeStyle = 'rgba(3,59,107,0.06)';
+        roundRect(ctx, boxX, boxY, boxW, boxH, 8, true, true);
+        ctx.fillStyle = '#023b6b'; let y = boxY + padding; for(const line of lines){ ctx.fillText(line, boxX + padding, y); y += 18; }
+
+        const png = canvas.toDataURL('image/png'); const a=document.createElement('a'); a.href=png; a.download='triangulo.png'; a.click(); URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    });
+
+    function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+      if (typeof r === 'undefined') r = 5;
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+      if (fill) ctx.fill();
+      if (stroke) ctx.stroke();
+    }
+
+    // events
+    calcBtn.addEventListener('click', computeAndRender);
+    resetBtn.addEventListener('click', ()=>{ aInput.value=''; bInput.value=''; cInput.value=''; summaryEl.innerHTML=''; triGroup.innerHTML=''; state.pts=[{x:0,y:0},{x:0,y:0},{x:0,y:0}]; typeBadge.textContent='Tipo: —'; });
+    unitEl.addEventListener('change', ()=>{ state.unit = unitEl.value; if(aInput.value && bInput.value && cInput.value){ computeAndRender(); }});
+
+    function computeAndRender(){
+      const res = computeFromSidesInputs();
+      if(!res) return;
+      showResults(res);
+      state.pts = placeTriangleFromSides(res.a,res.b,res.c);
+      drawTriangle();
+    }
+
+    function getCurrentMetrics(){
+      const [p1,p2,p3] = state.pts;
+      const a = Math.hypot(p2.x-p3.x,p2.y-p3.y);
+      const b = Math.hypot(p1.x-p3.x,p1.y-p3.y);
+      const c = Math.hypot(p1.x-p2.x,p1.y-p2.y);
+      const A = radToDeg(Math.acos(clamp((b*b + c*c - a*a)/(2*b*c))));
+      const B = radToDeg(Math.acos(clamp((a*a + c*c - b*b)/(2*a*c))));
+      const C = 180 - A - B;
+      const unit = state.unit;
+      const sideClass = detectType(a,b,c);
+      const angleClass = classifyAngle(a,b,c);
+      return {
+        a: fromMeters(a,unit),
+        b: fromMeters(b,unit),
+        c: fromMeters(c,unit),
+        A, B, C,
+        type: sideClass,
+        angleType: angleClass,
+        unit
+      };
+    }
+
+    // init default
+    function initDefault(){ aInput.value = '1'; bInput.value='1'; cInput.value='1'; computeAndRender(); }
+    initDefault();
+  </script></body>
 </html>
